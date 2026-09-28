@@ -15,6 +15,7 @@ import { DraggableList } from '../../components/DraggableList';
 import { AddTaskFAB } from '../../components/AddTaskFAB';
 import { QuickFilters } from '../../components/QuickFilters';
 import { TaskActionModal } from '../../components/TaskActionModal';
+import { TagFilterModal } from '../../components/TagFilterModal';
 import { formatDisplayDate, getTomorrowString, getTodayString } from '../../utils/dateHelpers';
 
 export default function TodayScreen() {
@@ -30,11 +31,17 @@ export default function TodayScreen() {
     moveTaskToDate,
     filterPriority,
     filterStatus,
+    filterTag,
+    prioritySort,
+    availableTags,
     setFilterPriority,
     setFilterStatus,
+    setFilterTag,
+    togglePrioritySort,
   } = useTasks();
 
   const [activeTaskForModal, setActiveTaskForModal] = useState<Task | null>(null);
+  const [tagModalVisible, setTagModalVisible] = useState(false);
 
   const completedCount = allDateTasks.filter((t) => t.completed).length;
   const totalCount = allDateTasks.length;
@@ -96,13 +103,27 @@ export default function TodayScreen() {
         </View>
       )}
 
-      {/* Quick Filters */}
+      {/* Quick Filters (Status, Priority, Tag Button, Priority Sort Button) */}
       <QuickFilters
         selectedPriority={filterPriority}
         onSelectPriority={setFilterPriority}
         selectedStatus={filterStatus}
         onSelectStatus={setFilterStatus}
+        selectedTag={filterTag}
+        onOpenTagFilter={() => setTagModalVisible(true)}
+        prioritySort={prioritySort}
+        onTogglePrioritySort={togglePrioritySort}
       />
+
+      {/* Notice if manual drag and drop is temporarily overridden by priority sorting */}
+      {prioritySort !== 'none' && (
+        <View style={styles.sortNotice}>
+          <Ionicons name="information-circle-outline" size={16} color="#007AFF" />
+          <Text style={styles.sortNoticeText}>
+            Ordenado por prioridad ({prioritySort === 'desc' ? 'alta a baja' : 'baja a alta'}).
+          </Text>
+        </View>
+      )}
 
       {/* List / Empty State */}
       <View style={styles.listContainer}>
@@ -111,7 +132,7 @@ export default function TodayScreen() {
           onToggleTask={(id) => toggleTaskCompleted(id, selectedDate)}
           onPressTask={handleEditTask}
           onLongPressTask={(task) => setActiveTaskForModal(task)}
-          onDragEnd={reorderTasks}
+          onDragEnd={prioritySort === 'none' ? reorderTasks : () => {}}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Ionicons name="sparkles-outline" size={56} color="#007AFF" />
@@ -153,6 +174,15 @@ export default function TodayScreen() {
             moveTaskToDate(activeTaskForModal.id, activeTaskForModal.date, targetDate);
           }
         }}
+      />
+
+      {/* Tag Selection Filter Modal */}
+      <TagFilterModal
+        visible={tagModalVisible}
+        onClose={() => setTagModalVisible(false)}
+        tags={availableTags}
+        selectedTag={filterTag}
+        onSelectTag={setFilterTag}
       />
     </SafeAreaView>
   );
@@ -232,6 +262,22 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#34C759',
     borderRadius: 4,
+  },
+  sortNotice: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#007AFF15',
+    marginHorizontal: 16,
+    marginTop: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    gap: 6,
+  },
+  sortNoticeText: {
+    fontSize: 12,
+    color: '#007AFF',
+    fontWeight: '500',
   },
   listContainer: {
     flex: 1,

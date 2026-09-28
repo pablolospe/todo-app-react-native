@@ -1,13 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Priority, PRIORITIES, PRIORITY_COLORS, PRIORITY_LABELS, PRIORITY_ICONS } from '../constants/priority';
+import { PrioritySortOrder } from '../store/useTodoStore';
 
 interface QuickFiltersProps {
   selectedPriority: Priority | 'all';
   onSelectPriority: (priority: Priority | 'all') => void;
   selectedStatus: 'all' | 'pending' | 'completed';
   onSelectStatus: (status: 'all' | 'pending' | 'completed') => void;
+  selectedTag: string | null;
+  onOpenTagFilter: () => void;
+  prioritySort: PrioritySortOrder;
+  onTogglePrioritySort: () => void;
 }
 
 export const QuickFilters: React.FC<QuickFiltersProps> = ({
@@ -15,6 +21,10 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
   onSelectPriority,
   selectedStatus,
   onSelectStatus,
+  selectedTag,
+  onOpenTagFilter,
+  prioritySort,
+  onTogglePrioritySort,
 }) => {
   const handlePressPriority = (p: Priority | 'all') => {
     if (Platform.OS !== 'web') {
@@ -30,8 +40,62 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({
     onSelectStatus(s);
   };
 
+  const handlePressSort = () => {
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+    onTogglePrioritySort();
+  };
+
+  const getSortLabel = () => {
+    if (prioritySort === 'desc') return 'Descendente';
+    if (prioritySort === 'asc') return 'Ascendente';
+    return 'Manual';
+  };
+
+  const getSortIcon = () => {
+    if (prioritySort === 'desc') return 'arrow-down';
+    if (prioritySort === 'asc') return 'arrow-up';
+    return 'swap-vertical-outline';
+  };
+
   return (
     <View style={styles.wrapper}>
+      {/* Top action row: Tag filter button + Priority Sort button */}
+      <View style={styles.actionRow}>
+        <Pressable
+          style={[styles.actionBtn, selectedTag !== null && styles.actionBtnActive]}
+          onPress={onOpenTagFilter}>
+          <Ionicons
+            name={selectedTag ? 'pricetag' : 'pricetag-outline'}
+            size={16}
+            color={selectedTag ? '#007AFF' : '#3A3A3C'}
+          />
+          <Text
+            style={[styles.actionBtnText, selectedTag !== null && styles.actionBtnTextActive]}
+            numberOfLines={1}>
+            {selectedTag ? `#${selectedTag}` : 'Filtrar por Tag'}
+          </Text>
+          {selectedTag !== null && (
+            <View style={styles.activeDot} />
+          )}
+        </Pressable>
+
+        <Pressable
+          style={[styles.actionBtn, prioritySort !== 'none' && styles.actionBtnActive]}
+          onPress={handlePressSort}>
+          <Ionicons
+            name={getSortIcon() as any}
+            size={16}
+            color={prioritySort !== 'none' ? '#007AFF' : '#3A3A3C'}
+          />
+          <Text
+            style={[styles.actionBtnText, prioritySort !== 'none' && styles.actionBtnTextActive]}>
+            {getSortLabel()}
+          </Text>
+        </Pressable>
+      </View>
+
       {/* Status pills */}
       <View style={styles.statusRow}>
         <Pressable
@@ -125,6 +189,41 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 4,
     gap: 8,
+  },
+  actionRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  actionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5EA',
+    gap: 6,
+  },
+  actionBtnActive: {
+    backgroundColor: '#007AFF15',
+    borderColor: '#007AFF',
+  },
+  actionBtnText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#3A3A3C',
+  },
+  actionBtnTextActive: {
+    color: '#007AFF',
+  },
+  activeDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#007AFF',
   },
   statusRow: {
     flexDirection: 'row',
