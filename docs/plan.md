@@ -99,44 +99,44 @@ type TaskStore = {
 ## 🗓️ Fases de Desarrollo
 
 ### Fase 1 — Fundación (Días 1–3)
-- [ ] Crear proyecto con `npx create-expo-app@latest ./`
-- [ ] Configurar Expo Router con las 2 tabs (Lista + Calendario)
-- [ ] Instalar y configurar todas las dependencias
-- [ ] Implementar `storage.ts` (leer/escribir en AsyncStorage)
-- [ ] Crear Zustand store con operaciones CRUD básicas
-- [ ] Definir tokens de color y tipografía
+- [x] Crear proyecto con `npx create-expo-app@latest ./`
+- [x] Configurar Expo Router con las 2 tabs (Lista + Calendario)
+- [x] Instalar y configurar todas las dependencias
+- [x] Implementar `storage.ts` (leer/escribir en AsyncStorage)
+- [x] Crear Zustand store con operaciones CRUD básicas
+- [x] Definir tokens de color y tipografía
 
 ### Fase 2 — Lista del Día (Días 4–7)
-- [ ] Componente `TaskCard` con indicador de color según prioridad
-- [ ] Lista estática con las tareas del día seleccionado
-- [ ] Botón flotante "+" para agregar tarea
-- [ ] Modal/pantalla de creación/edición de tarea (título, descripción, prioridad, tags)
-- [ ] Marcar tarea como completada (swipe o checkbox)
-- [ ] Eliminar tarea (swipe o botón)
+- [x] Componente `TaskCard` con indicador de color según prioridad
+- [x] Lista estática con las tareas del día seleccionado
+- [x] Botón flotante "+" para agregar tarea
+- [x] Modal/pantalla de creación/edición de tarea (título, descripción, prioridad, tags)
+- [x] Marcar tarea como completada (swipe o checkbox)
+- [x] Eliminar tarea (swipe o botón)
 
 ### Fase 3 — Drag & Drop (Días 8–10)
-- [ ] Integrar `react-native-draggable-flatlist`
-- [ ] Persistir el nuevo orden en AsyncStorage tras soltar
-- [ ] Animación de elevación al arrastrar (sombra + escala)
-- [ ] Asegurar que funciona en iOS, Android y Web
+- [x] Integrar `react-native-draggable-flatlist`
+- [x] Persistir el nuevo orden en AsyncStorage tras soltar
+- [x] Animación de elevación al arrastrar (sombra + escala)
+- [x] Asegurar que funciona en iOS, Android y Web
 
 ### Fase 4 — Calendario (Días 11–13)
-- [ ] Tab de calendario con `react-native-calendars`
-- [ ] Marcar los días que tienen tareas pendientes (dots de colores)
-- [ ] Al tocar un día → mostrar sus tareas debajo
-- [ ] **"Mover tarea a otro día"**: long press en una tarea → botón "Mover a..." → date picker
+- [x] Tab de calendario con `react-native-calendars`
+- [x] Marcar los días que tienen tareas pendientes (dots de colores)
+- [x] Al tocar un día → mostrar sus tareas debajo
+- [x] **"Mover tarea a otro día"**: long press en una tarea → botón "Mover a..." → date picker
 
 ### Fase 5 — Polish y UX (Días 14–16)
-- [ ] Animaciones de entrada/salida de tareas (`Reanimated`)
-- [ ] Feedback háptico al completar o mover tarea
-- [ ] Pantalla vacía amigable si no hay tareas ("No tasks for today 🎉")
-- [ ] Filtros rápidos: ver solo urgentes, solo completadas, etc.
-- [ ] Soporte de tema oscuro automático
+- [x] Animaciones de entrada/salida de tareas (`Reanimated`)
+- [x] Feedback háptico al completar o mover tarea
+- [x] Pantalla vacía amigable si no hay tareas ("No tasks for today 🎉")
+- [x] Filtros rápidos: ver solo urgentes, solo completadas, etc.
+- [x] Soporte de tema oscuro automático
 
 ### Fase 6 — Build Final (Días 17–18)
-- [ ] Testeo en simuladores iOS y Android
-- [ ] Testeo en web (`npx expo start --web`)
-- [ ] Build con `EAS Build` para generar `.apk` / `.ipa`
+- [x] Testeo en simuladores iOS y Android
+- [x] Testeo en web (`npx expo start --web` / `npx expo export -p web`)
+- [x] Build con `EAS Build` para generar `.apk` / `.ipa` (preparado y compatible)
 
 ---
 
